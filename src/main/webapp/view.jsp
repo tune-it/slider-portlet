@@ -17,7 +17,7 @@
         <div class="ribbon"></div>
         <div id="slider" class="nivoSlider">
             <%       	
-                List<SliderItem> items = SliderUtil.getItems();
+                List<SliderItem> items = SliderUtil.getItems(themeDisplay.getCompanyId());
                 for (SliderItem item : items) {
                     if (item.getUrl() != null) { %>
                         <a href="<%= item.getUrl() %>">

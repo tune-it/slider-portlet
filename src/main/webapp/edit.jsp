@@ -15,7 +15,7 @@
 <%@ include file="./init.jsp"%>
 
 <%
-    SliderPortlet.initSliderTable();
+    SliderPortlet.initSliderTable(themeDisplay.getCompanyId());
     String themeName = preferences.getValue(SliderPortlet.PROPS_THEME, ThemeEnum.DEFAULT.getName());
 %>
 
@@ -44,7 +44,7 @@
         </div>
 
         <div style="float: right;">
-            <a href="<%=portletDisplay.getURLBack()%>" class="portlet-icon-back" />Return to Full page</a>
+            <a href="<%= portletDisplay.getURLBack() %>" class="portlet-icon-back" />Return to Full page</a>
         </div>
     </aui:fieldset>
 	
@@ -53,14 +53,14 @@
             <%
                 List<SliderItem> items = (ArrayList<SliderItem>) portletSession.getAttribute("sliderItems");
                 if (items == null) {
-                    items = SliderUtil.getItems();
+                    items = SliderUtil.getItems(themeDisplay.getCompanyId());
                     portletSession.setAttribute("sliderItems", items);
                 }
 
                 int i = 0;
                 for (SliderItem item : items) {
             %>
-                    <liferay-ui:panel id="<%= "slider-panel-" + i %>" cssClass="slider-panel" title='<%= "Slide " + (i + 1)%>' 
+                    <liferay-ui:panel id='<%= "slider-panel-" + i %>' cssClass="slider-panel" title='<%= "Slide " + (i + 1)%>' 
                                       collapsible="true" extended="true" >
 
                         <div style="float: right;">
@@ -106,7 +106,6 @@
     <aui:input type="hidden" name="<%= SliderPortlet.PROPS_ACTION %>" value="<%= ActionEnum.SAVE.getName() %>"/>
     <aui:input type="hidden" name="<%= SliderPortlet.PROPS_SLIDE_POSITION %>" value="<%= 0 %>"/>	
 </aui:form>
-
 
 <script type="text/javascript">
     function <portlet:namespace />addSlide() {

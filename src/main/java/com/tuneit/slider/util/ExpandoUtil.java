@@ -25,16 +25,17 @@ public class ExpandoUtil {
 
     /**
      * Get Expando table. If table is not found then it will be created
-     * @param tableName
+     * @param companyId Site company id
+     * @param tableName Expando table name
      * @return Expando table
      * @throws PortalException
      * @throws SystemException
      */
-    public static ExpandoTable getExpandoTable(String tableName) throws PortalException, SystemException {
+    public static ExpandoTable getExpandoTable(long companyId, String tableName) throws PortalException, SystemException {
         try {
-            return ExpandoTableLocalServiceUtil.getTable(tableName, tableName);
+            return ExpandoTableLocalServiceUtil.getTable(companyId, tableName, tableName);
         } catch (NoSuchTableException nste) {
-            return ExpandoTableLocalServiceUtil.addTable(tableName, tableName);   
+            return ExpandoTableLocalServiceUtil.addTable(companyId, tableName, tableName);   
         }
     }
     
@@ -65,17 +66,17 @@ public class ExpandoUtil {
     }
     
 
-    public static void deleteRow(String tableName, long classPK) throws PortalException, SystemException {
-        ExpandoTable table = ExpandoUtil.getExpandoTable(tableName);
+    public static void deleteRow(long companyId, String tableName, long classPK) throws PortalException, SystemException {
+        ExpandoTable table = ExpandoUtil.getExpandoTable(companyId, tableName);
         ExpandoRowLocalServiceUtil.deleteRow(table.getTableId(), classPK);
     }
     
-    public static void addValue(String tableName, String columnName, long id, Object value) throws PortalException, SystemException {
-        ExpandoValueLocalServiceUtil.addValue(tableName, tableName, columnName, id, value);
+    public static void addValue(long companyId, String tableName, String columnName, long id, Object value) throws PortalException, SystemException {
+        ExpandoValueLocalServiceUtil.addValue(companyId, tableName, tableName, columnName, id, value);
     }
 
-    public static List<ExpandoRow> getAllValues(String tableName) throws SystemException{
-        return ExpandoRowLocalServiceUtil.getRows(tableName, tableName, -1, -1);
+    public static List<ExpandoRow> getAllValues(long companyId, String tableName) throws SystemException{
+        return ExpandoRowLocalServiceUtil.getRows(companyId, tableName, tableName, -1, -1);
     }
     
   

@@ -18,6 +18,8 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.expando.model.ExpandoColumnConstants;
 import com.liferay.portlet.expando.model.ExpandoTable;
@@ -69,7 +71,7 @@ public class SliderPortlet extends MVCPortlet {
         }
     }
     
-    public static void initSliderTable() {
+    public static void initSliderTable(long companyId) {
         Map<String, Integer> columns = new HashMap<String, Integer>();
         columns.put("imagepath", ExpandoColumnConstants.STRING);
         columns.put("url".toLowerCase(), ExpandoColumnConstants.STRING);
@@ -78,7 +80,7 @@ public class SliderPortlet extends MVCPortlet {
         columns.put("effect".toLowerCase(), ExpandoColumnConstants.STRING);
         
         try {
-            ExpandoTable table = ExpandoUtil.getExpandoTable(SliderItem.class.getSimpleName());
+            ExpandoTable table = ExpandoUtil.getExpandoTable(companyId, SliderItem.class.getSimpleName());
             ExpandoUtil.addExpandoColumns(table, columns);
         } catch (Exception e) {
             log.error(e, e);
@@ -108,12 +110,13 @@ public class SliderPortlet extends MVCPortlet {
     
     public void save(ActionRequest req, UploadPortletRequest uploadRequest, PortletSession sess) throws Exception {
         PortletPreferences preferences = req.getPreferences();
+        ThemeDisplay themeDisplay = (ThemeDisplay) req.getAttribute(WebKeys.THEME_DISPLAY);
         
-        String theme = ParamUtil.getString(uploadRequest, PROPS_THEME); 
+        String theme = ParamUtil.getString(uploadRequest, PROPS_THEME);
         
         List<SliderItem> items = (ArrayList<SliderItem>) sess.getAttribute("sliderItems");
         items = updateItemsValues(uploadRequest, items);
-        items = SliderUtil.setItems(items);
+        items = SliderUtil.setItems(themeDisplay.getCompanyId(), items);
         sess.setAttribute("sliderItems", items);
         
         preferences.setValue(PROPS_THEME, theme);
@@ -133,13 +136,15 @@ public class SliderPortlet extends MVCPortlet {
         sess.setAttribute("sliderItems", items);    
     }
     
-    public void deleteSlide(ActionRequest req, UploadPortletRequest uploadRequest, PortletSession sess) throws Exception {        
+    public void deleteSlide(ActionRequest req, UploadPortletRequest uploadRequest, PortletSession sess) throws Exception {
+        ThemeDisplay themeDisplay = (ThemeDisplay) req.getAttribute(WebKeys.THEME_DISPLAY);
+        
         List<SliderItem> items = (ArrayList<SliderItem>) sess.getAttribute("sliderItems");
         int i = ParamUtil.getInteger(uploadRequest, PROPS_SLIDE_POSITION);
         items = updateItemsValues(uploadRequest, items);
         SliderItem removedItem = items.remove(i);
         try {
-            ExpandoUtil.deleteRow(SliderItem.class.getSimpleName(), removedItem.getClassPK());
+            ExpandoUtil.deleteRow(themeDisplay.getCompanyId(), SliderItem.class.getSimpleName(), removedItem.getClassPK());
         } catch (Exception e) {
             log.debug("Removed slide not found in database.");
         }
