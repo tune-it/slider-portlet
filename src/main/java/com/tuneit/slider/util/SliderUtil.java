@@ -33,9 +33,6 @@ public class SliderUtil {
             // First symbol has upper case because I invoke methods "set".
             String[] names = {"ImagePath", "Url", "Title", "Alt", "Effect"};
             for (String n : names) {
-                System.out.println("n = " + n);
-                System.out.println("table = " + table);
-                System.out.println("columnIds = " + columnIds);
                 ExpandoColumn column = ExpandoColumnLocalServiceUtil.getColumn(table.getTableId(), n.toLowerCase());
                 if(column == null) {
                     column = ExpandoColumnLocalServiceUtil.addColumn(table.getTableId(), n.toLowerCase(), ExpandoColumnConstants.STRING);
