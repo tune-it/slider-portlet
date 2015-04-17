@@ -72,9 +72,10 @@
                             </div>
                         </div>
 
-                        <img src="<%= item.getImagePath() %>" alt="<%= item.getAlt() %>" title="<%= item.getTitle() %>" style="width: 100%;" class="img-preview"/>
-
-                        <aui:input name="<%= SliderPortlet.PROPS_IMAGE_PATH %>" label="Image path" value="<%= item.getImagePath() %>" />
+                        <% if (item.getImagePath() != null && !item.getImagePath().isEmpty()) { %>
+                            <img src="<%= item.getImagePath() %>" alt="<%= item.getAlt() %>" title="<%= item.getTitle() %>" style="width: 100%;" class="img-preview"/>
+                        <% } %>
+                        <aui:input name="<%= SliderPortlet.PROPS_IMAGE_FILE %>" label="Image file" type="file" />
                         <aui:input name="<%= SliderPortlet.PROPS_URL %>" label="Image link" value="<%= item.getUrl() %>" />				
                         <aui:input name="<%= SliderPortlet.PROPS_TITLE %>" label="Title" value="<%= HtmlUtil.escape(item.getTitle()) %>" />
                         <aui:input name="<%= SliderPortlet.PROPS_ALT %>" label="Alt" value="<%= item.getAlt() %>" />
